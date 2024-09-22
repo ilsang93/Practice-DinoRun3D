@@ -166,8 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa56267caa8f1694eb1d16e820901512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raptorPrefab: {fileID: 4943026393367729771, guid: 18cdeb82e935406469fd3a3f3d385b5f, type: 3}
-  raptorAnimController: {fileID: 9100000, guid: b1fb5d9fcddf7184b8f0d3da20289d86, type: 2}
+  raptorPrefab: {fileID: 2095625460325635176, guid: 238cfe96d0840ac4986caca83faad322, type: 3}
 --- !u!1 &273238554
 GameObject:
   m_ObjectHideFlags: 3
