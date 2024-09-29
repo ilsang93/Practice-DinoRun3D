@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DinoContoller : MonoBehaviour
 {
     [SerializeField] private GameObject raptorPrefab;
-    private List<GameObject> raptors = new();
+    [SerializeField] private TextMeshPro dinoCountText;
+    private readonly List<GameObject> raptors = new();
 
     private void Start()
     {
@@ -13,11 +15,17 @@ public class DinoContoller : MonoBehaviour
         InputManager.Instance.OnPress_A += MoveLeft;
         InputManager.Instance.OnPress_D += MoveRight;
         InputManager.Instance.OnPressDown_Space += AddRaptor;
+        InputManager.Instance.OnPressDown_Backspace += RemoveRaptor;
     }
 
     private void Update()
     {
-        if (raptors.Count <= 0) return;
+        if (raptors.Count <= 0)
+        {
+            dinoCountText.text = "0";
+            return;
+        }
+        dinoCountText.text = raptors.Count.ToString();
         Run();
     }
 
@@ -42,17 +50,32 @@ public class DinoContoller : MonoBehaviour
 
     private void AddRaptor()
     {
-        if (raptors.Count >= 9) return;
         GameObject raptor = Instantiate(raptorPrefab, Vector3.zero, new Quaternion(0, 180, 0, 0), transform);
         raptors.Add(raptor);
         SortRaptor();
     }
 
+    private void RemoveRaptor()
+    {
+        if (raptors.Count < 1) return;
+        GameObject targetRaptor = raptors[^1];
+        raptors.Remove(targetRaptor);
+        Destroy(targetRaptor);
+        SortRaptor();
+    }
+
     private void SortRaptor()
     {
-        float angleStep = 360f / raptors.Count * Constants.DINO_SORT_RATIO;
 
-        for (int i = 0; i < raptors.Count; i++) {
+        float angleStep = 360f / (raptors.Count > 9 ? 9 : raptors.Count) * Constants.DINO_SORT_RATIO;
+
+        for (int i = 0; i < raptors.Count; i++)
+        {
+            if (i >= 9)
+            {
+                raptors[i].SetActive(false);
+                continue;
+            }
             float angle = i * angleStep;
 
             float angleRad = angle * Mathf.Deg2Rad;

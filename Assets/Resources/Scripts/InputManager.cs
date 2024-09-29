@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
     public Action OnPress_A;
     public Action OnPress_D;
     public Action OnPressDown_Space;
+    public Action OnPressDown_Backspace;
 
     private void Awake()
     {
@@ -32,6 +33,9 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space)) {
             OnPressDown_Space?.Invoke();
+        }
+        if (Input.GetKeyDown(KeyCode.Backspace)) {
+            OnPressDown_Backspace?.Invoke();
         }
     }
 }
