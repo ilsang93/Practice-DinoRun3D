@@ -6,6 +6,15 @@ public class DinoContoller : MonoBehaviour
 {
     [SerializeField] private GameObject raptorPrefab;
     [SerializeField] private TextMeshPro dinoCountText;
+    [SerializeField] private Transform colPos;
+    public Vector3 ColPos
+    {
+        get
+        {
+            return colPos.position;
+        }
+    }
+    [SerializeField] private float colRadius;
     private readonly List<GameObject> raptors = new();
 
     private void Start()
@@ -27,6 +36,23 @@ public class DinoContoller : MonoBehaviour
         }
         dinoCountText.text = raptors.Count.ToString();
         Run();
+        DoorCheck();
+    }
+
+    private void DoorCheck()
+    {
+        Collider[] hitCols = Physics.OverlapSphere(ColPos, colRadius);
+        foreach (Collider col in hitCols)
+        {
+            if (col.CompareTag("Door"))
+            {
+                col.GetComponent<SelectDoors>().Excute(this, transform.position.x > 0);
+            }
+
+            if (col.CompareTag("Goal")) {
+                print("골인");
+            }
+        }
     }
 
     private void Run()
@@ -48,19 +74,57 @@ public class DinoContoller : MonoBehaviour
         transform.position += Constants.MOVE_HORIZON_SPEED * Time.deltaTime * Vector3.right;
     }
 
-    private void AddRaptor()
+    public void AddRaptor()
     {
+        if (raptors.Count > Constants.MAX_DINO_COUNT)
+        {
+            raptors.Add(null);
+            return;
+        }
         GameObject raptor = Instantiate(raptorPrefab, Vector3.zero, new Quaternion(0, 180, 0, 0), transform);
         raptors.Add(raptor);
         SortRaptor();
     }
 
-    private void RemoveRaptor()
+    public void TimesRaptor(int param)
+    {
+        int originCount = raptors.Count;
+        int targetCount = raptors.Count * param;
+
+        for (int i = originCount; i < targetCount; i++)
+        {
+            if (raptors.Count > Constants.MAX_DINO_COUNT)
+            {
+                raptors.Add(null);
+                continue;
+            }
+            GameObject raptor = Instantiate(raptorPrefab, Vector3.zero, new Quaternion(0, 180, 0, 0), transform);
+            raptors.Add(raptor);
+        }
+        SortRaptor();
+    }
+
+    public void RemoveRaptor()
     {
         if (raptors.Count < 1) return;
         GameObject targetRaptor = raptors[^1];
         raptors.Remove(targetRaptor);
         Destroy(targetRaptor);
+        SortRaptor();
+    }
+
+    public void DivisionRaptor(int param)
+    {
+        if (raptors.Count < 1) return;
+        int originCount = raptors.Count;
+        int targetCount = raptors.Count / param;
+
+        for (int i = 0; i < originCount - targetCount; i++)
+        {
+            GameObject targetRaptor = raptors[^1];
+            raptors.Remove(targetRaptor);
+            Destroy(targetRaptor);
+        }
         SortRaptor();
     }
 
@@ -71,7 +135,7 @@ public class DinoContoller : MonoBehaviour
 
         for (int i = 0; i < raptors.Count; i++)
         {
-            if (i >= 9)
+            if (i >= Constants.MAX_DINO_COUNT)
             {
                 raptors[i].SetActive(false);
                 continue;
@@ -85,5 +149,11 @@ public class DinoContoller : MonoBehaviour
 
             raptors[i].transform.localPosition = new Vector3(x, 0, z);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(ColPos, colRadius);
     }
 }

@@ -4,6 +4,10 @@ public class MapManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] mapPrefabs;
     [SerializeField] private int mapLength = 5;
+    [SerializeField] private GameObject doorPrefab;
+    [SerializeField] private Transform doorsParents;
+    [SerializeField] private float doorsOffset;
+    [SerializeField] private GameObject goalPrefab;
     private float nowLength = -5;
 
     private void Start()
@@ -34,5 +38,13 @@ public class MapManager : MonoBehaviour
             }
             nowLength += mapPrefabs[targetIdx].GetComponent<Map>().mapSize.z;
         }
+
+        int doorCount = (int)(nowLength / doorsOffset);
+        for (int i = 0; i < doorCount; i++)
+        {
+            Instantiate(doorPrefab, new Vector3(0, 0, (i + 1) * doorsOffset), Quaternion.identity, doorsParents);
+        }
+
+        Instantiate(goalPrefab, new Vector3(0, 0, nowLength), Quaternion.identity, doorsParents);
     }
 }
