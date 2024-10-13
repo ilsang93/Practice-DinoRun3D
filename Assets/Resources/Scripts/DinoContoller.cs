@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DinoContoller : MonoBehaviour
 {
     [SerializeField] private GameObject raptorPrefab;
     [SerializeField] private TextMeshPro dinoCountText;
+    public GameObject dinoCountBubble;
     [SerializeField] private Transform colPos;
     public Vector3 ColPos
     {
@@ -20,11 +22,12 @@ public class DinoContoller : MonoBehaviour
     private void Start()
     {
         raptors.Add(Instantiate(raptorPrefab, Vector3.zero, new Quaternion(0, 180, 0, 0), transform));
+        dinoCountBubble.SetActive(false);
 
-        InputManager.Instance.OnPress_A += MoveLeft;
-        InputManager.Instance.OnPress_D += MoveRight;
-        InputManager.Instance.OnPressDown_Space += AddRaptor;
-        InputManager.Instance.OnPressDown_Backspace += RemoveRaptor;
+        InputManager.instance.OnPress_A += MoveLeft;
+        InputManager.instance.OnPress_D += MoveRight;
+        InputManager.instance.OnPressDown_Space += AddRaptor;
+        InputManager.instance.OnPressDown_Backspace += RemoveRaptor;
     }
 
     private void Update()
@@ -34,9 +37,13 @@ public class DinoContoller : MonoBehaviour
             dinoCountText.text = "0";
             return;
         }
-        dinoCountText.text = raptors.Count.ToString();
-        Run();
-        DoorCheck();
+
+        if (GameManager.instance.gameState == GameState.Playing)
+        {
+            dinoCountText.text = raptors.Count.ToString();
+            Run();
+            DoorCheck();
+        }
     }
 
     private void DoorCheck()
@@ -49,8 +56,14 @@ public class DinoContoller : MonoBehaviour
                 col.GetComponent<SelectDoors>().Excute(this, transform.position.x > 0);
             }
 
-            if (col.CompareTag("Goal")) {
+            if (col.CompareTag("Goal"))
+            {
                 print("골인");
+                GameManager.instance.gameState = GameState.End;
+                GameManager.instance.SetClearPanel(raptors.Count);
+                GameManager.instance.SetStage();
+
+                SceneManager.LoadScene(0);
             }
         }
     }
@@ -62,6 +75,7 @@ public class DinoContoller : MonoBehaviour
 
     private void MoveLeft()
     {
+        if (GameManager.instance.gameState != GameState.Playing) return;
         if (transform.position.x <= Constants.MOVE_DISTANCE * Vector3.left.x) return;
         // transform.Translate(Constants.MOVE_HORIZON_SPEED * Time.deltaTime * Vector3.left);
         transform.position += Constants.MOVE_HORIZON_SPEED * Time.deltaTime * Vector3.left;
@@ -69,6 +83,7 @@ public class DinoContoller : MonoBehaviour
 
     private void MoveRight()
     {
+        if (GameManager.instance.gameState != GameState.Playing) return;
         if (transform.position.x >= Constants.MOVE_DISTANCE * Vector3.right.x) return;
         // transform.Translate(Constants.MOVE_HORIZON_SPEED * Time.deltaTime * Vector3.right);
         transform.position += Constants.MOVE_HORIZON_SPEED * Time.deltaTime * Vector3.right;
@@ -130,7 +145,29 @@ public class DinoContoller : MonoBehaviour
 
     private void SortRaptor()
     {
+        if (raptors.Count == 1)
+        {
+            raptors[0].transform.localPosition = Vector3.zero;
+            return;
+        }
 
+        for (int i = 0; i < raptors.Count; i++)
+        {
+            if (i >= Constants.MAX_DINO_COUNT)
+            {
+                continue;
+            }
+            float currentRadius = Constants.DINO_SORT_RADIUS_INITIAL + (Constants.DINO_SORT_RADIUS_GROWTH * i * Constants.DINO_SORT_RADIUS_MULTIPLIER);
+            float currentAngle = Constants.DINO_SORT_ANGLE_INCREMENT * i;
+
+            float x = Mathf.Cos(currentAngle * Mathf.Deg2Rad) * currentRadius;
+            float z = Mathf.Sin(currentAngle * Mathf.Deg2Rad) * currentRadius;
+
+            raptors[i].transform.localPosition = new Vector3(x, 0, z);
+        }
+    }
+    private void SortRaptorByCircle()
+    {
         float angleStep = 360f / (raptors.Count > 9 ? 9 : raptors.Count) * Constants.DINO_SORT_RATIO;
 
         for (int i = 0; i < raptors.Count; i++)

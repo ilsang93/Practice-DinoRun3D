@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager Instance { get; private set; }
+    public static InputManager instance { get; private set; }
     public Action OnPress_A;
     public Action OnPress_D;
     public Action OnPressDown_Space;
@@ -11,9 +11,9 @@ public class InputManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
         }
         else
         {
