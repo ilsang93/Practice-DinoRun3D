@@ -73,9 +73,6 @@ public class GameManager : MonoBehaviour
 
     public int GetStage()
     {
-        print(PlayerPrefs.HasKey("Stage"));
-        print(PlayerPrefs.GetInt("Stage"));
-
         return PlayerPrefs.HasKey("Stage") ? PlayerPrefs.GetInt("Stage") + 1 : 1;
     }
 

@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa56267caa8f1694eb1d16e820901512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raptorPrefab: {fileID: 2095625460325635176, guid: 238cfe96d0840ac4986caca83faad322, type: 3}
+  raptorPrefab: {fileID: 2095625460325635176, guid: 098afce94396e43468ae0ba80ba7b2c7, type: 3}
   dinoCountText: {fileID: 469347345}
   dinoCountBubble: {fileID: 1971818468}
   colPos: {fileID: 864542993}
@@ -526,6 +526,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &289280576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 289280577}
+  m_Layer: 0
+  m_Name: EnemyParents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &289280577
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289280576}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &469347343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,14 +1787,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 735406ab54f95e34b841c07b62a56db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Stages:
+  - {fileID: 11400000, guid: bed1e9a56dd603a47bb75b62e711c9f5, type: 2}
+  - {fileID: 11400000, guid: 986839a5bc6b26a4d9379ce3102bf2eb, type: 2}
+  - {fileID: 11400000, guid: c18cbd752a18d7a4d89100ac70ff13ce, type: 2}
   mapPrefabs:
   - {fileID: 567377402822320993, guid: 89eaf9be5d8915b4ca6a9e494a3cbdae, type: 3}
   - {fileID: 1696548997026204694, guid: 029755d6ae258fa4b91c1ce25101ab2d, type: 3}
   - {fileID: 5740707385345086143, guid: be9ef8b5a5cc0c745a1d8db6f9c206eb, type: 3}
   mapLength: 10
   doorPrefab: {fileID: 7950349470915758270, guid: 58e6c06fd8af6db44b6c0ee604a346f9, type: 3}
+  enemiesPrefab: {fileID: 2073695887754775836, guid: 7ae00236deb35884b805b3651af11509, type: 3}
   doorsParents: {fileID: 1401910600}
+  enemiesParents: {fileID: 289280577}
   doorsOffset: 30
+  enemiesOffset: 40
   goalPrefab: {fileID: 7950349470915758270, guid: e0c89503e31fe4f4bbdf1c534bc7165d, type: 3}
 --- !u!4 &1058732503
 Transform:
@@ -2607,4 +2645,5 @@ SceneRoots:
   - {fileID: 1980700224}
   - {fileID: 1058732503}
   - {fileID: 1401910600}
+  - {fileID: 289280577}
   - {fileID: 1671128786}
