@@ -87,7 +87,7 @@ public class MapManager : MonoBehaviour
         }
 
         int enemyCount = (int)(nowLength / enemiesOffset);
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 2; i < enemyCount; i++)
         {
             Instantiate(enemiesPrefab, new Vector3(0, 0, (i + 1) * enemiesOffset), Quaternion.identity, enemiesParents);
         }

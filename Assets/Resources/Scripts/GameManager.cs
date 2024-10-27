@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     public GameState gameState = GameState.Ready;
     public GameObject titlePanel;
     public GameObject clearPanel;
+    public GameObject gameOverPanel;
     public GameObject gamePanel;
     public TextMeshProUGUI finalDinoCount;
     public Slider progressBar;
@@ -62,8 +64,16 @@ public class GameManager : MonoBehaviour
     public void SetClearPanel(int dinoCount)
     {
         Time.timeScale = 0;
+        SoundManager.instance.PlaySfxOneshot(SfxEnum.DinoHit);
         clearPanel.SetActive(true);
         finalDinoCount.text = dinoCount.ToString();
+    }
+
+    public void SetGameOverPanel()
+    {
+        Time.timeScale = 0;
+        SoundManager.instance.PlaySfxOneshot(SfxEnum.GameOver);
+        gameOverPanel.SetActive(true);
     }
 
     public void SetTotalDistance(float distance)

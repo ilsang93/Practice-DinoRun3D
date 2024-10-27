@@ -77,6 +77,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(target.transform.position, transform.position) <= 0.5f)
         {
             target.GetComponent<Raptor>().IsTarget = false;
+            SoundManager.instance.PlaySfxOneshot(SfxEnum.DinoDie);
             target.transform.parent.GetComponent<DinoContoller>().RemoveRaptor();
             Destroy(gameObject);
         }

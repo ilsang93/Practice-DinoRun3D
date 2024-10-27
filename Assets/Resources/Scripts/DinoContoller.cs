@@ -53,17 +53,17 @@ public class DinoContoller : MonoBehaviour
         {
             if (col.CompareTag("Door"))
             {
+                SoundManager.instance.PlaySfxOneshot(SfxEnum.DoorHit);
                 col.GetComponent<SelectDoors>().Excute(this, transform.position.x > 0);
             }
 
             if (col.CompareTag("Goal"))
             {
+                SoundManager.instance.PlaySfxOneshot(SfxEnum.DoorHit);
                 print("골인");
                 GameManager.instance.gameState = GameState.End;
                 GameManager.instance.SetClearPanel(raptors.Count);
                 GameManager.instance.SetStage();
-
-                SceneManager.LoadScene(0);
             }
         }
     }
